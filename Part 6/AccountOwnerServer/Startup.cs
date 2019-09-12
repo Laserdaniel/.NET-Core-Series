@@ -15,7 +15,7 @@ namespace AccountOwnerServer
     {
         public Startup(IConfiguration configuration)
         {
-            LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+            LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
             Configuration = configuration;
         }
 
@@ -30,7 +30,7 @@ namespace AccountOwnerServer
 
             services.ConfigureLoggerService();
 
-            services.ConfigureMySqlContext(Configuration);
+            services.ConfigureSqlContext(Configuration);
 
             services.ConfigureRepositoryWrapper();
 
@@ -53,11 +53,6 @@ namespace AccountOwnerServer
             app.UseHttpsRedirection();
 
             app.UseCors("CorsPolicy");
-
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.All
-            });
 
             app.UseStaticFiles();
 
