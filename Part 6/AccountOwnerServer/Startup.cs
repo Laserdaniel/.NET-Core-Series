@@ -1,13 +1,19 @@
 ﻿using AccountOwnerServer.Extensions;
+using Entities.ExtendedModels;
+using Entities.Models;
+using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OData.Edm;
 using NLog;
 using System;
 using System.IO;
+using System.Web.Http;
 
 namespace AccountOwnerServer
 {
@@ -34,7 +40,14 @@ namespace AccountOwnerServer
 
             services.ConfigureRepositoryWrapper();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options =>
+                {
+                    options.EnableEndpointRouting = false;
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.ConfigureODataService();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,7 +69,22 @@ namespace AccountOwnerServer
 
             app.UseStaticFiles();
 
-            app.UseMvc();
+            
+
+            //app.UseMvc();
+
+            app.UseMvc(b =>
+            {
+                b.EnableDependencyInjection();
+                b.Select().Expand().Filter().OrderBy().MaxTop(100).Count();
+                b.MapODataServiceRoute("api", "api", GetEdmModel());
+            });
+        }
+        private static IEdmModel GetEdmModel()
+        {
+            var builder = new ODataConventionModelBuilder();
+            builder.EntitySet<Owner>("Owner");
+            return builder.GetEdmModel();
         }
     }
 }

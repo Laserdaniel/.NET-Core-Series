@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using Entities;
 using LoggerService;
+using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,9 +26,9 @@ namespace AccountOwnerServer.Extensions
 
         public static void ConfigureIISIntegration(this IServiceCollection services)
         {
-            services.Configure<IISOptions>(options => 
+            services.Configure<IISOptions>(options =>
             {
-                
+
             });
         }
 
@@ -46,5 +47,10 @@ namespace AccountOwnerServer.Extensions
         {
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         }
+        public static void ConfigureODataService(this IServiceCollection services)
+        {
+            services.AddOData();
+        }
+
     }
 }

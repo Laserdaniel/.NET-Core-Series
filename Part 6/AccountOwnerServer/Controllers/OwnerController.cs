@@ -4,11 +4,12 @@ using System.Threading.Tasks;
 using Contracts;
 using Entities.Extensions;
 using Entities.Models;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AccountOwnerServer.Controllers
 {
-    [Route("api/owner")]
+    [Route("api/[controller]")]
     [ApiController]
     public class OwnerController : ControllerBase
     {
@@ -22,6 +23,7 @@ namespace AccountOwnerServer.Controllers
         }
 
         [HttpGet]
+        [EnableQuery()]
         public async Task<IActionResult> GetAllOwners()
         {
             try
