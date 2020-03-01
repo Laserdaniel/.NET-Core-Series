@@ -52,5 +52,10 @@ namespace AccountOwnerServer.Extensions
             services.AddOData();
         }
 
+        //public static void ConfigureResponseWrapperMiddleware(this IServiceCollection services)
+        //{
+        //    services.;
+        //}
+
     }
 }

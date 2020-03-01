@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AccountOwnerServer.Attributes;
 using Contracts;
 using Entities.Extensions;
 using Entities.Models;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
+using static AccountOwnerServer.Models.ResponsePackage;
 
 namespace AccountOwnerServer.Controllers
 {
@@ -24,6 +26,7 @@ namespace AccountOwnerServer.Controllers
 
         [HttpGet]
         [EnableQuery()]
+        //[CustomQueryable]
         public async Task<IActionResult> GetAllOwners()
         {
             try

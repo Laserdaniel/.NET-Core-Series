@@ -1,4 +1,6 @@
 ﻿using AccountOwnerServer.Extensions;
+using AccountOwnerServer.Filters;
+using AccountOwnerServer.Middleware;
 using Entities.ExtendedModels;
 using Entities.Models;
 using Microsoft.AspNet.OData.Builder;
@@ -42,11 +44,14 @@ namespace AccountOwnerServer
 
             services.AddMvc(options =>
                 {
+                    options.Filters.Add(typeof(UnhandledExceptionFilter));
                     options.EnableEndpointRouting = false;
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.ConfigureODataService();
+
+            
 
         }
 
@@ -63,15 +68,14 @@ namespace AccountOwnerServer
                 app.UseHsts();
             }
 
+
             app.UseHttpsRedirection();
 
             app.UseCors("CorsPolicy");
 
             app.UseStaticFiles();
 
-            
-
-            //app.UseMvc();
+            app.UseMiddleware<ResponseWrapper>();
 
             app.UseMvc(b =>
             {
@@ -86,5 +90,7 @@ namespace AccountOwnerServer
             builder.EntitySet<Owner>("Owner");
             return builder.GetEdmModel();
         }
+
+
     }
 }
